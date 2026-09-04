@@ -31,7 +31,7 @@ function App() {
           <h1>To-do List App</h1>
           <input type='text' value={inputValue}   onChange={(e) => setInputValue(e.target.value)}/>
           <button className='add-btn'  onClick={addTask}>Add New Task</button>
-          <ul>
+          <ul className='task-list'>
               {tasks.filter((ta) => !ta.done).map((task) => 
                   <li key={task.id}>
                       <button onClick={() => removeTask(task.id)}>
