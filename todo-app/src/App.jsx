@@ -8,7 +8,7 @@ function App() {
   
   const [tasks, setTasks] = useState([
     {id: Date.now(), name: "Do chores", done: false},
-    {id: Date.now(), name: "Do dishes", done: false}
+    // {id: Date.now(), name: "Do dishes", done: false}
   ])
 
   const [inputValue, setInputValue] = useState("")
@@ -16,7 +16,7 @@ function App() {
   function addTask() {
     if(!inputValue.trim()) return
 
-    const newTask = {id: (tasks[tasks.length-1]?.id ?? 0) + 1, name: inputValue, done:false}
+    const newTask = {id: Date.now(), name: inputValue, done:false}
     setTasks([...tasks, newTask])
     setInputValue("")
   }
