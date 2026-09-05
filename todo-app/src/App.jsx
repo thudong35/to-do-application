@@ -4,11 +4,16 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import './App.css'
 
+function ListItem({name, onDeleteTask}) {
+    return <li>
+        <button onClick={onDeleteTask}>{name}</button>
+    </li>
+}
+
 function App() {
   
   const [tasks, setTasks] = useState([
     {id: Date.now(), name: "Do chores", done: false},
-    // {id: Date.now(), name: "Do dishes", done: false}
   ])
 
   const [inputValue, setInputValue] = useState("")
@@ -29,15 +34,11 @@ function App() {
     <>
       <div>
           <h1>To-do List App</h1>
-          <input type='text' value={inputValue}   onChange={(e) => setInputValue(e.target.value)}/>
+          <input type='text'  value={inputValue}  onChange={(e) => setInputValue(e.target.value)}/>
           <button className='add-btn'  onClick={addTask}>Add New Task</button>
           <ul className='task-list'>
               {tasks.filter((ta) => !ta.done).map((task) => 
-                  <li key={task.id}>
-                      <button onClick={() => removeTask(task.id)}>
-                        {task.name}
-                      </button>
-                  </li>
+                  <ListItem key={task.id} name={task.name} onDeleteTask={() => removeTask(task.id)}/>
               )}
           </ul>
       </div>
