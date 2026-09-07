@@ -1,46 +1,45 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
+import { useState, useEffect } from 'react'
+import TaskList from './components/TaskList'
 import './App.css'
 
-function ListItem({name, onDeleteTask}) {
-    return <li>
-        <button onClick={onDeleteTask}>{name}</button>
-    </li>
-}
+
 
 function App() {
   
-  const [tasks, setTasks] = useState([
-    {id: Date.now(), name: "Do chores", done: false},
-  ])
+  const [tasks, setTasks] = useState(JSON.parse(localStorage.getItem('tasks')) ||[])
+
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks))
+  }, [tasks])
 
   const [inputValue, setInputValue] = useState("")
 
   function addTask() {
     if(!inputValue.trim()) return
 
-    const newTask = {id: Date.now(), name: inputValue, done:false}
+    const newTask = {id: crypto.randomUUID(), name: inputValue, done:false}
     setTasks([...tasks, newTask])
     setInputValue("")
   }
 
+  function keyDown(e) {
+    if(e.key === 'Enter') {
+      addTask()
+    }
+  }
+
   function removeTask(id) {
-    setTasks(tasks.filter((task) => task.id !== id))
+    setTasks(tasks.filter((task) => task.id !== id));
   }
 
   return (
     <>
       <div>
           <h1>To-do List App</h1>
-          <input type='text'  value={inputValue}  onChange={(e) => setInputValue(e.target.value)}/>
-          <button className='add-btn'  onClick={addTask}>Add New Task</button>
-          <ul className='task-list'>
-              {tasks.filter((ta) => !ta.done).map((task) => 
-                  <ListItem key={task.id} name={task.name} onDeleteTask={() => removeTask(task.id)}/>
-              )}
-          </ul>
+          <input className='task-input' type='text'  value={inputValue} onKeyDown={keyDown}  onChange={(e) => setInputValue(e.target.value)}/>
+          <button className='add-task-btn'  onClick={addTask}>Add New Task</button>
+          <TaskList tasks={tasks} onRemoveTask={removeTask}/>
+          
       </div>
     </>
   )
